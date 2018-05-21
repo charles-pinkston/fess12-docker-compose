@@ -1,0 +1,48 @@
+version: '2.2'
+services:
+  elasticsearch:
+    build:
+      context: ./elasticsearch
+    container_name: elasticsearch
+    environment:
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - es_fess
+
+  fess:
+    build:
+      context: ./fess
+      args:
+        FESS_VERSION: "12.1.2"
+    container_name: fess
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    depends_on:
+      - elasticsearch
+    environment:
+      ES_HTTP_URL: "http://elasticsearch:9200"
+      ES_TRANSPORT_URL: "elasticsearch:9300"
+      FESS_DICTIONARY_PATH: "/var/lib/elasticsearch/config/"
+    volumes:
+      - ./fess/logs:/usr/share/fess/logs
+    networks:
+      - es_fess
+
+volumes:
+  es_data:
+    driver: local
+
+networks:
+  es_fess:
