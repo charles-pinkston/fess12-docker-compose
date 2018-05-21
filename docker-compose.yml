@@ -1,25 +1,5 @@
-version: '2.2'
+version: '3.1'
 services:
-  elasticsearch:
-    build:
-      context: ./elasticsearch
-    container_name: elasticsearch
-    environment:
-      - cluster.name=elasticsearch
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - es_data:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-      - 9300:9300
-    networks:
-      - es_fess
-
   fess:
     build:
       context: ./fess
@@ -38,11 +18,33 @@ services:
     volumes:
       - ./fess/logs:/usr/share/fess/logs
     networks:
-      - es_fess
+      - elastic_fess
+ 
+  elasticsearch:
+    build:
+      context: ./elasticsearch
+    container_name: elasticsearch
+    environment:
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - elastic_fess
+
+
 
 volumes:
   es_data:
     driver: local
 
 networks:
-  es_fess:
+  elastic_fess:

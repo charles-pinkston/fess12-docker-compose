@@ -7,8 +7,6 @@
 # will cause Elasticsearch to be invoked with -Ecluster.name=testcluster
 #
 # see https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html#_setting_default_settings
-export ES_TMPDIR=`mktemp -d -t elasticsearch.XXXXXXXX`
-
 es_opts=''
 
 while IFS='=' read -r envvar_key envvar_value

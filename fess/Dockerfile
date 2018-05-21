@@ -1,11 +1,9 @@
 FROM openjdk:8-jre
 LABEL maintainer "N2SM <support@n2sm.net>"
 
-ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
+ARG FESS_VERSION
 
-ENV FESS_VERSION 12.1.2
-ENV ELASTIC_VERSION 6.2.4
-ENV FESS_APP_TYPE docker
+ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -16,10 +14,13 @@ RUN apt-get update && \
       && \
     apt-get clean
 
-RUN groupadd -g 1000 elasticsearch && \
-    groupadd -g 1001 fess && \
-    useradd -u 1000 elasticsearch -g elasticsearch && \
-    useradd -u 1001 fess -g fess
+RUN groupadd -g 1000 fess && \
+    useradd -u 1000 fess -g fess
+
+# RUN groupadd -g 1000 elasticsearch && \
+#     groupadd -g 1001 fess && \
+#     useradd -u 1000 elasticsearch -g elasticsearch && \
+#     useradd -u 1001 fess -g fess
 
 RUN set -x && \
     wget --progress=dot:mega https://github.com/codelibs/fess/releases/download/fess-${FESS_VERSION}/fess-${FESS_VERSION}.deb -O /tmp/fess-${FESS_VERSION}.deb && \
