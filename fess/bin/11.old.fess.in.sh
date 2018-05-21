@@ -14,9 +14,9 @@ if [ "x$FESS_HEAP_SIZE" != "x" ]; then
 fi
 
 # External elasticsearch cluster
-#ES_HTTP_URL=http://localhost:9200
-#ES_TRANSPORT_URL=localhost:9300
-#FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
+ES_HTTP_URL=http://elasticsearch:9200
+ES_TRANSPORT_URL=elasticsearch:9300
+FESS_DICTIONARY_PATH=/var/lib/elasticsearch/config/
 
 # SSL truststore for certificate validation over https
 #JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=/tech/elastic/config/truststore.jks"
